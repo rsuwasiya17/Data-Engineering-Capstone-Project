@@ -60,7 +60,7 @@ We will model these data sets with star schema data modeling.
 
 To accomplish all the tasks related to the preprocessing of the datasets, the steps can be found in [etl.py](https://github.com/rsuwasiya17/Data-Engineering-Capstone-Project/blob/main/etl.py) to load, select, clean, transform and store the resulting datasets in a very convenient way. The open-source framework Apache Spark was used as the main tool. Spark provides an interface for programming entire clusters with implicit data parallelism and fault tolerance.
 
-All the logic of preprocessing is concentrated here in order to only represent the general steps of the ETL. We have also tested all the steps of **"etl.py"** in [etl_capstone_project.ipynb](https://github.com/rsuwasiya17/Data-Engineering-Capstone-Project/blob/main/etl_capstone_project.ipynb) , but here the source and destination data is stored locally and rest of the logic and functionality are same. Data Quality of tables are also tested by verifying, empty tables are not present.
+All the logic of preprocessing is concentrated here in order to only represent the general steps of the ETL. We have also tested all the steps of [etl.py](https://github.com/rsuwasiya17/Data-Engineering-Capstone-Project/blob/main/etl.py) in [etl_capstone_project.ipynb](https://github.com/rsuwasiya17/Data-Engineering-Capstone-Project/blob/main/etl_capstone_project.ipynb) , but here the source and destination data is stored locally and rest of the logic and functionality are same. Data Quality of tables are also tested by verifying, empty tables are not present.
 
 ---
 ## Step 4: Run Pipelines to Model the Data 
