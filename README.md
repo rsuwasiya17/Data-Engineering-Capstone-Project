@@ -54,7 +54,7 @@ Used PySpark on the datasets to test ETL data pipeline logic and Split datasets 
 
 We will model these data sets with star schema data modeling.
 
-![Star-Schema](images/star-schema.PNG)
+![Star-Schema](images/star-schema.png)
 
 ### 3.2 Mapping Out Data Pipelines
 
@@ -81,7 +81,7 @@ We have tested and performed Data quality checks in **"etl_capstone_project.ipyn
 #### 4.3 Data dictionary 
 Create a data dictionary for your data model. For each field, provide a brief description of what the data is and where it came from. You can include the data dictionary in the notebook or in a separate file.
 
-![Data_dictionary](images/Data_dictionary.PNG)
+![Data_dictionary](images/Data_dictionary.png)
 ---
 
 #### Step 5: Complete Project Write Up
