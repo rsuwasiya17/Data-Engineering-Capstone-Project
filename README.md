@@ -45,7 +45,7 @@ This project will integrate I94 Immigration Dataset, U.S. City Demographic Datas
 ## Step 2: Explore and Assess the Data
 ### Explore the Data 
 
-Use PySpark on the datasets to test ETL data pipeline logic and Split datasets to dimensional tables and changed the column names for better clarity.
+Used PySpark on the datasets to test ETL data pipeline logic and Split datasets to dimensional tables and changed the column names for better clarity.
 
 ---
 
