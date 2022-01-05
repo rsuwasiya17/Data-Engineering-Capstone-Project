@@ -61,7 +61,7 @@ Used PySpark on the datasets to test ETL data pipeline logic and Split datasets 
 ## Step 3: Define the Data Model
 ### 3.1 Conceptual Data Model
 
-We will model these data sets with star schema data modeling.
+We will model these data sets with star schema data modeling, since the purpose of this data warehouse is for OLAP and provide Simplified Business Reporting Logic. Star schema provides the advantage of running simpler queries, for example the Join logic of star schema is quite easy in comparison to other join logic which are needed to fetch data from a transactional schema that is highly normalized.
 
 ![Star-Schema](images/star-schema.png)
 
