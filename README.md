@@ -2,6 +2,15 @@
 
 #### Project Summary
 This project builds a data warehouse by integrating data from different data sources like immigration data , temperature data and demographic data for data analysis purpose.
+
+Using the relation between the fact table "immigration_data" and other dimension tables, multiple data analysis can be done.
+From the "immigration_date_season" we can identify,the season or month in which most people prefer to immigrate.
+In "immigration_airline" we can identify the most widely used airline and visa_type used during immigration.
+In "immigration_personal" we can do analysis by identifying the country from which most people migrate,from which age group and gender.
+Using "temperature_data" we can analyse whether the average temperature of cities have impact on immigration.
+In "demographics_population" different anaylsis can be done like identifying the different races of people residing in multiple cities and
+"demographics_stats" can be used to do analysis to identify Average Household Size in different cities.
+The tables "city_code", "state_code" and "country_code" helps us to give names of Cities, state and country from their corresponding codes respectively.
  
 The project follows the follow steps:
 * Step 1: Scope the Project and Gather Data
