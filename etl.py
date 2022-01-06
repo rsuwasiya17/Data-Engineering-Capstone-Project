@@ -17,16 +17,20 @@ config.read('dwh.cfg', encoding='utf-8-sig')
 
 os.environ['AWS_ACCESS_KEY_ID']=config['AWS']['AWS_ACCESS_KEY_ID']
 os.environ['AWS_SECRET_ACCESS_KEY']=config['AWS']['AWS_SECRET_ACCESS_KEY']
-SOURCE_S3_BUCKET = config['S3']['SOURCE_S3_BUCKET']
-DEST_S3_BUCKET = config['S3']['DEST_S3_BUCKET']
+
+os.environ["JAVA_HOME"] = "/usr/lib/jvm/java-8-openjdk-amd64"
+os.environ["PATH"] = "/opt/conda/bin:/opt/spark-2.4.3-bin-hadoop2.7/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/java-8-openjdk-amd64/bin"
+os.environ["SPARK_HOME"] = "/opt/spark-2.4.3-bin-hadoop2.7"
+os.environ["HADOOP_HOME"] = "/opt/spark-2.4.3-bin-hadoop2.7"
 
 
 # data processing function to create Spark session
 def create_spark_session():
-    spark = SparkSession.builder\
-        .config("spark.jars.packages",\
-                "saurfang:spark-sas7bdat:2.0.0-s_2.11")\
-        .enableHiveSupport().getOrCreate()
+    spark = SparkSession \
+    .builder \
+    .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:2.7.0") \
+    .enableHiveSupport() \
+    .getOrCreate()
     return spark
 
 #Function to convert to Dateformat
@@ -55,10 +59,12 @@ def processing_immigration_data(spark, input_data, output_data):
 
     logging.info("Start processing immigration")
     
+    #immigration_data = os.path.join(input_data + 'immigration/18-83510-I94-Data-2016/i94_feb16_sub.sas7bdat')
+    #df_spark = spark.read.format('com.github.saurfang.sas.spark').load(immigration_data)
+    
     # read immigration data file
-    immigration_data = os.path.join(input_data + 'immigration/18-83510-I94-Data-2016/*.sas7bdat')
-    df = spark.read.format('com.github.saurfang.sas.spark').load(immigration_data)
-
+    df_spark =spark.read.load('./sas_data')
+    
     logging.info("Start processing immigration table")
     # extracting columns to create immigration table
     immigration_data = df_spark.select('cicid', 'i94yr', 'i94mon', 'i94port', 'i94addr',\
@@ -111,7 +117,7 @@ def processing_immigration_data(spark, input_data, output_data):
     
     # write immigration_date dimension table to parquet file partitioned by year and month
     immigration_date_season.write.mode("overwrite")\
-                            .partitionBy("arrival_year", "arrival_month").parquet('./output/immigration_date.parquet')
+                            .partitionBy("arrival_year", "arrival_month").parquet(path= output_data + 'immigration_date')
     logging.info("Created parquet files from immigration_date_season table.")
     
 
@@ -158,7 +164,7 @@ def processing_label_descriptions(spark, input_data, output_data):
     """
 
     logging.info("Start processing label descriptions")
-    label_file = os.path.join(input_data + "I94_SAS_Labels_Descriptions.SAS")
+    label_file = os.path.join("./I94_SAS_Labels_Descriptions.SAS")
     with open(label_file) as f:
         contents = f.readlines()
 
@@ -247,7 +253,7 @@ def processing_demographics_data(spark, input_data, output_data):
 
     
     demographics_population = df.select(['City', 'State', 'Male Population', 'Female Population', \
-                              'Number of Veterans', 'Foreign-born', 'Race']).distinct() \
+                              'Number of Veterans', 'Foreign-born', 'Race']).distinct().na.drop() \
                               .withColumn("demog_pop_id", monotonically_increasing_id())
     
     # Renaming columns of demographics_population table
@@ -263,7 +269,7 @@ def processing_demographics_data(spark, input_data, output_data):
 
     logging.info("Start processing demographics_stats")
     demographics_stats = df.select(['City', 'State', 'Median Age', 'Average Household Size'])\
-                            .distinct().withColumn("demog_stat_id", monotonically_increasing_id())
+                            .distinct().na.drop().withColumn("demog_stat_id", monotonically_increasing_id())
                             
     # Renaming columns of demographics_stats table
     new_columns = ['city', 'state', 'median_age', 'avg_household_size']
@@ -280,8 +286,8 @@ def processing_demographics_data(spark, input_data, output_data):
     
 def main():
     spark = create_spark_session()
-    input_data = SOURCE_S3_BUCKET
-    output_data = DEST_S3_BUCKET
+    input_data = 's3a://source-bucket-1726/'
+    output_data = 's3a://destination-bucket-1726/'
     
     processing_immigration_data(spark, input_data, output_data)    
     processing_label_descriptions(spark, input_data, output_data)
